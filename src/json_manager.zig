@@ -151,7 +151,6 @@ pub const JsonManager = struct { //struct for doing read and write in file.
     }
 
     pub const path_file_accesory = "assets/fileAccesory/fileAccesory.json";
-    var last_accesory: DataAccesory = .{};
     pub var last_time_file_edit: i128 = 0;
 
     pub fn readJsonAccesory(layers: *std.ArrayList(Layer)) !void {
@@ -189,14 +188,6 @@ pub const JsonManager = struct { //struct for doing read and write in file.
 
         const current_accesory = json_read.value; //get value fo json parsed.
 
-        if (last_accesory.dateWrite == 0) { //save the json read when start.
-            last_accesory = current_accesory;
-            return;
-        }
-
-        if (current_accesory.dateWrite == last_accesory.dateWrite) //accesory same than last update.
-            return;
-
         switch (current_accesory.cmd) {
             .activ_layer => {
                 //do the proces fo switch layer accesory.
@@ -206,8 +197,6 @@ pub const JsonManager = struct { //struct for doing read and write in file.
                 );
             },
         }
-
-        last_accesory = current_accesory; //save last edit.
     }
 
     pub fn saveData(layers: *std.ArrayList(Layer)) !void {
