@@ -16,6 +16,7 @@ const WindowPage = @import("window_page.zig").WindowPage;
 const AnimePage = @import("anime_page.zig").AnimePage;
 const AnimeLayerPage = @import("anime_layer_page.zig").AnimeLayerPage;
 const AnimeTalkPage = @import("anime_talk_page.zig").AnimeTalkPage;
+const os = std.os; //for time edit os.
 
 pub fn main() !void {
     AllocatorManager.init(); //manager memlory allocators.

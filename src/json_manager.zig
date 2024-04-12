@@ -47,6 +47,11 @@ pub const JsonManager = struct { //struct for doing read and write in file.
         const value_read = json_read.value; //get value fo json parsed.
 
         JsonManager.data_params = DataParamPrintable.import_data(value_read, renderer_menu); //get value fo json parsed.
+
+        // --- init time edit file accesory.
+
+        const stats_file_accesory = try std.fs.cwd().statFile(path_file_accesory);
+        last_time_file_edit = stats_file_accesory.mtime;
     }
 
     pub fn saveParams() !void {
@@ -145,15 +150,21 @@ pub const JsonManager = struct { //struct for doing read and write in file.
 
     }
 
+    pub const path_file_accesory = "assets/fileAccesory/fileAccesory.json";
     var last_accesory: DataAccesory = .{};
+    pub var last_time_file_edit: i128 = 0;
 
     pub fn readJsonAccesory(layers: *std.ArrayList(Layer)) !void {
         if (!JsonManager.data_params.read_file_accesory)
             return;
 
-        const path_file = "assets/fileAccesory/fileAccesory.json";
+        const stats_file_accesory = try std.fs.cwd().statFile(path_file_accesory);
+        if (stats_file_accesory.mtime == last_time_file_edit)
+            return;
 
-        const file = try std.fs.cwd().openFile(path_file, .{}); //open file.
+        last_time_file_edit = stats_file_accesory.mtime;
+
+        const file = try std.fs.cwd().openFile(path_file_accesory, .{}); //open file.
         defer file.close();
 
         var file_str = std.ArrayList(u8).init(AllocatorManager.arena_update_allocator);
